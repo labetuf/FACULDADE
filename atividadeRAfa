@@ -1,1 +1,349 @@
+______________________________________________________________________________________________
 
+# Atividades para Casa – Capítulo 8
+
+## Atividade 1 – Reescrevendo código sem `goto`
+Você recebeu o seguinte pseudocódigo, escrito de forma semelhante ao estilo das primeiras versões do Fortran, utilizando `goto`:
+
+```text
+i := 1
+goto check
+
+loop:
+    print(i)
+    i := i + 1
+
+check:
+    if (i <= 10) then
+        goto loop
+```
+
+**Tarefas:**
+1. Reescreva o código acima utilizando um laço de repetição pré-teste (`while`) em uma linguagem de sua escolha (C, Java, Python, etc.).
+
+#include <stdio.h>
+int main() {
+    int i = 1;
+
+    while (i <= 10) {
+        printf("%d\n", i);
+        i++;
+    }
+
+    return 0;
+}
+
+2. Reescreva novamente utilizando um laço de repetição controlado por contador (`for`).
+
+#include <stdio.h>
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        printf("%d\n", i);
+    }
+
+    return 0;
+}
+
+3. Compare os três códigos (original com `goto`, versão com `while` e versão com `for`) e escreva um pequeno parágrafo discutindo qual forma é mais legível e por quê.
+
+- O código com goto é confuso, pois exige acompanhar saltos para entender o fluxo.
+
+- O while já deixa explícita a condição de parada (i <= 10), mas ainda exige manipular manualmente a variável i.
+
+- O for é o mais legível e conciso, pois concentra a inicialização, condição e incremento em uma única linha.
+
+- Conclusão: A versão com for é a mais clara e direta.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Atividade 2 – Seleção múltipla em diferentes linguagens
+Muitos programas oferecem menus interativos. Suponha que você precisa implementar um menu com as seguintes opções:
+
+1. Calcular o quadrado de um número.
+2. Calcular o fatorial de um número.
+3. Sair do programa.
+
+**Tarefas:**
+1. Implemente esse menu em **C** utilizando `switch/case`.
+
+#include <stdio.h>
+int fatorial(int n) {
+    int resultado = 1;
+    for (int i = 1; i <= n; i++) {
+        resultado *= i;
+    }
+    return resultado;
+}
+
+int main() {
+    int opcao, num;
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Calcular o quadrado de um número\n");
+        printf("2. Calcular o fatorial de um número\n");
+        printf("3. Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                printf("Digite um número: ");
+                scanf("%d", &num);
+                printf("Quadrado: %d\n", num * num);
+                break;
+            case 2:
+                printf("Digite um número: ");
+                scanf("%d", &num);
+                printf("Fatorial: %d\n", fatorial(num));
+                break;
+            case 3:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida!\n");
+        }
+    } while (opcao != 3);
+
+    return 0;
+}
+
+2. Implemente o mesmo menu em **Python**, utilizando apenas `if/elif/else`.
+
+def fatorial(n):
+    resultado = 1
+    for i in range(1, n + 1):
+        resultado *= i
+    return resultado
+
+while True:
+    print("\nMenu:")
+    print("1. Calcular o quadrado de um número")
+    print("2. Calcular o fatorial de um número")
+    print("3. Sair")
+    opcao = int(input("Escolha uma opção: "))
+
+    if opcao == 1:
+        num = int(input("Digite um número: "))
+        print("Quadrado:", num * num)
+    elif opcao == 2:
+        num = int(input("Digite um número: "))
+        print("Fatorial:", fatorial(num))
+    elif opcao == 3:
+        print("Saindo...")
+        break
+    else:
+        print("Opção inválida!")
+
+3. Execute os dois programas e compare as soluções em relação à clareza e quantidade de código.
+
+- C (switch/case) → mais verboso, precisa declarar variáveis, escrever protótipo de função e usar scanf/printf.
+
+- Python (if/elif/else) → mais curto e direto, não exige sintaxe extra.
+
+4. Escreva um comentário final destacando em qual linguagem foi mais simples de implementar e justificar o motivo.
+
+- O Python é mais simples para esse tipo de implementação, pois reduz a quantidade de código e é mais legível para menus interativos.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Atividade 3 – Explorando alternativas ao `goto`
+Historicamente, o `goto` foi usado para resolver diferentes tipos de desvio. Hoje, a maioria das linguagens fornece alternativas como `break`, `continue` e `return`.
+
+**Tarefas:**
+1. Escreva um programa que percorra uma lista de números inteiros e:
+   - Pare imediatamente a execução ao encontrar o número 0 (`break`).
+   - Pule os números negativos sem processá-los (`continue`).
+   - Retorne o dobro do primeiro número par encontrado (`return`).
+
+#include <stdio.h>
+int processar(int lista[], int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        int numero = lista[i];
+
+        if (numero == 0) {
+            printf("Encontrado 0. Parando execução.\n");
+            break;
+        }
+
+        if (numero < 0) {
+            continue;
+        }
+
+        if (numero % 2 == 0) {
+            return numero * 2;
+        }
+    }
+
+    return -1; // Caso não encontre nenhum número par válido
+}
+
+int main() {
+    int valores[] = {5, -3, 7, -1, 8, 0, 4};
+    int tamanho = sizeof(valores) / sizeof(valores[0]);
+
+    int resultado = processar(valores, tamanho);
+
+    if (resultado != -1) {
+        printf("Resultado: %d\n", resultado);
+    } else {
+        printf("Nenhum número par encontrado.\n");
+    }
+
+    return 0;
+}
+
+2. Comente sobre como seria a implementação desse mesmo programa utilizando apenas `goto` e rótulos, destacando as vantagens da abordagem moderna.
+
+#include <stdio.h>
+int processar_com_goto(int lista[], int tamanho) {
+    int i = 0;
+    if (i >= tamanho) goto fim;
+
+    if (lista[i] == 0) {
+        printf("Encontrado 0. Parando execução.\n");
+        goto fim;
+    }
+
+    if (lista[i] < 0) {
+        i++;
+        goto inicio; // pula os negativos
+    }
+
+    if (lista[i] % 2 == 0) {
+        return lista[i] * 2; // retorna o dobro do primeiro par
+    }
+
+    i++;
+    goto inicio;
+
+fim:
+    return -1;
+}
+
+int main() {
+    int valores[] = {5, -3, 7, -1, 8, 0, 4};
+    int tamanho = sizeof(valores) / sizeof(valores[0]);
+
+    int resultado = processar_com_goto(valores, tamanho);
+
+    if (resultado != -1) {
+        printf("Resultado: %d\n", resultado);
+    } else {
+        printf("Nenhum número par encontrado.\n");
+    }
+
+    return 0;
+}
+
+______________________________________________________________________________________________
+______________________________________________________________________________________________
+
+# Exercícios – Capítulo 9: Subprogramas
+
+## Exercício 1 – Passagem de Parâmetros por Valor e por Referência
+Considere o seguinte pseudocódigo de uma função que tenta dobrar o valor de um número:
+
+```text
+procedure dobrar(x)
+    x := x * 2
+end
+```
+
+1. Implemente esse subprograma em **C** duas vezes:
+   - A primeira versão recebendo o parâmetro **por valor**.
+   - A segunda versão recebendo o parâmetro **por referência** (usando ponteiros).
+
+#include <stdio.h>
+
+void dobrar_por_valor(int x) {
+    x = x * 2;
+    printf("Dentro da função (por valor): %d\n", x);
+}
+
+int main() {
+    int numero = 10;
+    dobrar_por_valor(numero);
+    printf("Depois da chamada (por valor): %d\n", numero);
+    return 0;
+}
+
+2. Escreva um programa principal que:
+   - Crie uma variável inteira com valor inicial 10.
+   - Chame a função `dobrar` por valor e exiba o resultado.
+   - Chame a função `dobrar` por referência e exiba o resultado.
+
+#include <stdio.h>
+
+void dobrar_por_referencia(int *x) {
+    *x = (*x) * 2;
+    printf("Dentro da função (por referência): %d\n", *x);
+}
+
+int main() {
+    int numero = 10;
+    dobrar_por_referencia(&numero);
+    printf("Depois da chamada (por referência): %d\n", numero);
+    return 0;
+}
+
+**Questões:**
+- Qual a diferença observada entre as duas versões?
+Na versão por valor, a função recebe uma cópia da variável. Ou seja, o cálculo de x * 2 altera apenas essa cópia, e o valor da variável original 
+fora da função permanece inalterado.
+Na versão por referência, a função recebe o endereço de memória da variável. Assim, qualquer modificação feita dentro da função afeta diretamente 
+a variável original.
+
+- Por que o valor da variável só se altera na versão por referência?
+Isso acontece porque, ao passar por referência (com ponteiros em C), a função manipula diretamente a memória da variável original. Já no caso da 
+passagem por valor, a função só tem acesso a uma cópia, que deixa de existir após o término da função
+
+- Relacione essa diferença com as estratégias de passagem de parâmetros discutidas no Capítulo 9.
+Passagem por valor: preserva a variável original, útil quando não queremos que ela seja alterada. Passagem por referência: permite que a função 
+modifique diretamente os dados da variável, sendo eficiente quando precisamos de alterações ou ao lidar com grandes estruturas (sem cópia desnecessária).
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Exercício 2 – Corrotinas em GoLang (primeiro contato)
+As **corrotinas** permitem a execução concorrente de rotinas dentro de um programa. Em Go, isso é feito com a palavra-chave `go`.
+
+1. Crie um arquivo chamado `main.go`.
+2. Implemente o seguinte programa simples:
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func escrever(texto string) {
+    for i := 0; i < 5; i++ {
+        fmt.Println(texto, i)
+        time.Sleep(time.Millisecond * 500)
+    }
+}
+
+func main() {
+    go escrever("Corrotina")  // executa em paralelo
+    escrever("Função normal") // executa no fluxo principal
+}
+```
+
+3. Compile e execute o programa com:
+   ```bash
+   go run main.go
+   ```
+
+**Questões:**
+- O que acontece com a ordem das mensagens exibidas?
+As mensagens das duas funções aparecem intercaladas, mas a ordem exata pode variar a cada execução.
+
+- Por que as mensagens da corrotina e da função normal se intercalam?
+Porque a corrotina (go escrever("Corrotina")) é executada concorrentemente em paralelo ao fluxo principal da 
+função normal. O sistema operacional alterna a execução das duas rotinas, permitindo sobreposição
+
+- Relacione esse comportamento com a definição de **corrotinas** estudada no Capítulo 9.
+Corrotinas são subprogramas que podem ser executados de forma concorrente ou cooperativa, pausando e retomando 
+sua execução sem encerrar completamente. Isso permite que múltiplas tarefas sejam executadas “ao mesmo tempo” 
+dentro de um mesmo programa, como mostrado pelo comportamento intercalado das mensagens.
