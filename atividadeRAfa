@@ -347,3 +347,175 @@ função normal. O sistema operacional alterna a execução das duas rotinas, pe
 Corrotinas são subprogramas que podem ser executados de forma concorrente ou cooperativa, pausando e retomando 
 sua execução sem encerrar completamente. Isso permite que múltiplas tarefas sejam executadas “ao mesmo tempo” 
 dentro de um mesmo programa, como mostrado pelo comportamento intercalado das mensagens.
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+
+Atividade 1 – Escopo Estático x Escopo Dinâmico 
+Objetivo: Compreender a diferença entre escopo estático e dinâmico. 
+Implementação em Python 
+x = 10 
+def f(): 
+print(f"Dentro de f(), x = {x}") 
+def g(): 
+x = 20 
+print(f"Dentro de g(), antes de chamar f(), x = {x}") 
+f() 
+print("Iniciando a execução...") 
+g() 
+Versão em JAVA: 
+let x = 10; 
+function f() { 
+console.log(`Dentro de f(), x = ${x}`); 
+} 
+function g() { 
+let x = 20; 
+console.log(`Dentro de g(), antes de chamar f(), x = ${x}`); 
+f(); 
+} 
+console.log("Iniciando a execução..."); 
+g(); 
+Atividade 2 – Tempo de Vida das Variáveis 
+Objetivo: Analisar a diferença entre variáveis estáticas e automáticas. 
+Implementação em C: 
+#include <stdio.h> 
+void contador() { 
+// 'a' é uma variável automática (o padrão para variáveis locais). 
+// Ela é criada e inicializada toda vez que a função é chamada. 
+int a = 0;  
+// 'b' é uma variável estática. 
+// Ela é criada e inicializada APENAS UMA VEZ, na primeira chamada 
+da função. 
+// Seu valor é mantido entre as chamadas subsequentes. 
+static int b = 0;  
+a++; 
+b++; 
+printf("Valor de a (automática): %d | Valor de b (estática): %d\n", a, b); 
+} 
+int main() { 
+printf("Primeira chamada:\n"); 
+contador(); 
+   
+  printf("Segunda chamada:\n"); 
+  contador(); 
+   
+  printf("Terceira chamada:\n"); 
+  contador(); 
+   
+  return 0; 
+} 
+Atividade 3 – Declaração de Tipos e Coerção 
+Objetivo: Explorar tipagem estática e dinâmica, além de conversão de 
+tipos. 
+Experimento em Java (Tipagem Estática): 
+public class TesteTipos { 
+    public static void main(String[] args) { 
+        // 1. Variável 'num' é declarada como um inteiro (int). 
+        int num = 10; 
+        System.out.println("O valor inicial de num é: " + num); 
+ 
+        // 2. Tentativa de atribuir uma string a uma variável int. 
+        // A linha abaixo causará um ERRO DE COMPILAÇÃO. 
+        // num = "dez"; // Erro: Incompatible types. String cannot be 
+converted to int. 
+ 
+// 3. Somando 'num + 5' (considerando que a linha com erro foi 
+removida/comentada) 
+int resultado = num + 5; 
+System.out.println("O resultado de num + 5 é: " + resultado); 
+} 
+} 
+Experimento em Python (Tipagem Dinâmica): 
+# 1. Variável 'num' é criada e aponta para o inteiro 10. 
+num = 10 
+print(f"O valor inicial de num é: {num} (tipo: {type(num)})") 
+# 2. A mesma variável 'num' agora aponta para a string 'dez'. 
+# Isso é perfeitamente válido em Python. 
+num = 'dez' 
+print(f"O novo valor de num é: '{num}' (tipo: {type(num)})") 
+# 3. Tentativa de somar 'num + 5' após a reatribuição. 
+# Isso causará um ERRO DE EXECUÇÃO. 
+print("Tentando calcular num + 5...") 
+try: 
+resultado = num + 5 
+print(resultado) 
+except TypeError as e: 
+    print(f"Erro em tempo de execução: {e}") 
+Atividade 4 – Trabalhando com Arrays e Registros (Structs) 
+Objetivo: Compreender a diferença entre tipos homogêneos (arrays) e 
+heterogêneos (structs/objetos). 
+Implementação em C: 
+#include <stdio.h> 
+#include <string.h> // Necessário para a função strcpy 
+ 
+int main() { 
+    // --- Array: Uma coleção HOMOGÊNEA --- 
+    // Todos os 5 elementos devem ser do tipo 'int'. 
+    int notas[5] = {10, 8, 9, 7, 5}; 
+    printf("--- Exemplo com Array ---\n"); 
+    printf("A terceira nota no array é: %d\n\n", notas[2]); // Acesso por 
+índice 
+ 
+ 
+    // --- Struct: Um registro HETEROGÊNEO --- 
+    // Agrupa dados de tipos diferentes (char[], char[], int) em uma única 
+entidade. 
+    struct Livro { 
+        char titulo[100]; 
+        char autor[100]; 
+        int anoPublicacao; 
+    }; 
+ 
+    // Inicializando um objeto (uma variável do tipo 'struct Livro') 
+    struct Livro meuLivro; 
+    strcpy(meuLivro.titulo, "O Senhor dos Anéis"); 
+    strcpy(meuLivro.autor, "J.R.R. Tolkien"); 
+    meuLivro.anoPublicacao = 1954; 
+     
+    printf("--- Exemplo com Struct ---\n"); 
+    // Acesso pelo nome do campo 
+    printf("Título: %s\n", meuLivro.titulo);  
+    printf("Autor: %s\n", meuLivro.autor); 
+    printf("Ano: %d\n", meuLivro.anoPublicacao); 
+ 
+    return 0; 
+} 
+ 
+Implementação em Java: 
+ 
+Arquivo livro.java: 
+// A classe define a estrutura do nosso registro heterogêneo 
+public class Livro { 
+    String titulo; 
+    String autor; 
+    int anoPublicacao; 
+ 
+    // Construtor para facilitar a criação de objetos 
+    public Livro(String titulo, String autor, int anoPublicacao) { 
+        this.titulo = titulo; 
+        this.autor = autor; 
+        this.anoPublicacao = anoPublicacao; 
+    } 
+} 
+Arquivo biblioteca.java: 
+import java.util.ArrayList; 
+ 
+public class Biblioteca { 
+    public static void main(String[] args) { 
+        // Criando uma coleção (ArrayList) para armazenar objetos do tipo 
+Livro. 
+        // O ArrayList em si é homogêneo: só aceita objetos 'Livro'. 
+        ArrayList<Livro> estante = new ArrayList<>(); 
+ 
+        // Criando e adicionando 3 objetos 'Livro' à coleção 
+        estante.add(new Livro("Duna", "Frank Herbert", 1965)); 
+        estante.add(new Livro("Fundação", "Isaac Asimov", 1951)); 
+        estante.add(new Livro("Neuromancer", "William Gibson", 1984)); 
+         
+// Imprimindo apenas os títulos dos livros 
+System.out.println("--- Títulos dos Livros na Estante ---"); 
+for (Livro livro : estante) { 
+System.out.println(livro.titulo); // Acesso ao campo 'titulo' de cada 
+objeto 
+} 
+} 
+} 
